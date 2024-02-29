@@ -4,7 +4,10 @@ const app = express();
 const { MongoClient, ObjectId } = require("mongodb");
 //PUT/DELETE 요청 가능
 const methodOverride = require("method-override");
-const bcrypt = require("bcrypt");
+
+const { S3Client } = require("@aws-sdk/client-s3");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
 require("dotenv").config();
 
 app.use(methodOverride("_method"));
@@ -15,33 +18,33 @@ app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//passport 라이브러리 셋팅
-const session = require("express-session");
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
-const MongoStore = require("connect-mongo");
+//라우터 설정
+app.use("/", require("./routes/list.js"));
+app.use("/", require("./routes/edit.js"));
+app.use("/", require("./routes/auth.js"));
 
-app.use(passport.initialize());
-app.use(
-  session({
-    secret: "암호화에 쓸 비번",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 60 * 60 * 1000 },
-    store: MongoStore.create({
-      mongoUrl: process.env.DB_URL,
-      dbName: "forum",
-    }),
-  })
-);
+const s3 = new S3Client({
+  region: "ap-northeast-2",
+  credentials: {
+    accessKeyId: process.env.IM_KEY,
+    secretAccessKey: process.env.IM_SECRET,
+  },
+});
 
-app.use(passport.session());
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: "gnuoy-j",
+    key: function (요청, file, cb) {
+      cb(null, Date.now().toString()); //업로드시 파일명 변경가능
+    },
+  }),
+});
 
 let db;
-const url = process.env.DB_URL;
+let connectDB = require("./database.js");
 
-new MongoClient(url)
-  .connect()
+connectDB
   .then((client) => {
     console.log("DB연결성공");
     db = client.db("forum");
@@ -60,31 +63,6 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-app.get("/list", async (req, res) => {
-  let result = await db.collection("post").find().toArray();
-  //ejs 파일로 데이터 전송
-  res.render("list.ejs", { posts: result });
-});
-
-app.get("/write", (req, res) => {
-  res.render("write.ejs");
-});
-
-app.post("/new-post", async (req, res) => {
-  try {
-    if (req.body.title == "") {
-      res.send("빈칸");
-    } else if (req.body.content == "") {
-      res.send("내용빈칸");
-    } else {
-      await db.collection("post").insertOne({ title: req.body.title, content: req.body.content });
-      res.redirect("/list");
-    }
-  } catch (e) {
-    res.send("서버에러");
-  }
-});
-
 app.get("/detail/:id", async (req, res) => {
   try {
     let result = await db.collection("post").findOne({ _id: new ObjectId(req.params.id) });
@@ -94,93 +72,47 @@ app.get("/detail/:id", async (req, res) => {
   }
 });
 
-app.get("/edit/:id", async (req, res) => {
-  let result = await db.collection("post").findOne({ _id: new ObjectId(req.params.id) });
-  res.render("edit.ejs", { result: result });
-});
+app.get("/write", (req, res) => {
+  console.log(req.user);
 
-app.put("/edit", async (req, res) => {
-  //inc - 증감, mul - 곱, unset - 필드값삭제
-  // await db.collection("post").updateOne({ _id: 5 }, { $inc: { like: 1 } });
-  await db
-    .collection("post")
-    .updateOne({ _id: new ObjectId(req.body.id) }, { $set: { title: req.body.title, content: req.body.content } });
-  res.redirect("/list");
+  if (req.user == undefined) {
+    res.send("로그인해주세요");
+  } else {
+    res.render("write.ejs");
+  }
+});
+app.post("/new-post", async (req, res) => {
+  console.log("하이" + req.user);
+  upload.single("img1")(req, res, async (err) => {
+    if (err) return res.send("img 업로드 에러");
+    //이미지 업로드 완료시 실행할 코드
+    try {
+      if (req.body.title == "") {
+        res.send("빈칸");
+      } else if (req.body.content == "") {
+        res.send("내용빈칸");
+      } else {
+        await db.collection("post").insertOne({
+          user: req.user._id,
+          username: req.user.username,
+          title: req.body.title,
+          content: req.body.content,
+          img: req.file ? req.file.location : "",
+        });
+        res.redirect("/list");
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(500).send("서버에러");
+    }
+  });
 });
 app.delete("/delete", async (req, res) => {
-  await db.collection("post").deleteOne({ _id: new ObjectId(req.query.id) });
-  console.log(req.query);
+  await db.collection("post").deleteOne({ _id: new ObjectId(req.query.id), user: new ObjectId(req.user._id) });
   res.send("삭제완료");
 });
-app.get("/list/:id", async (req, res) => {
-  let result = await db
-    .collection("post")
-    .find()
-    //skip은 대용량 처리시 좋지 않음
-    .skip((req.params.id - 1) * 5)
-    .limit(5)
-    .toArray();
-  res.render("list.ejs", { posts: result });
-});
-
-app.get("/list/next/:id", async (req, res) => {
-  let result = await db
-    .collection("post")
-    .find({ _id: { $gt: new ObjectId(req.params.id) } })
-    //skip은 대용량 처리시 좋지 않음
-    // .skip((req.params.id - 1) * 5)
-    .limit(5)
-    .toArray();
-
-  res.render("list.ejs", { posts: result });
-});
-
-//제출 한 아이디/비번 검사하는 코드
-passport.use(
-  new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
-    let result = await db.collection("user").findOne({ username: 입력한아이디 });
-    if (!result) {
-      return cb(null, false, { message: "아이디 DB에 없음" });
-    }
-
-    if (await bcrypt.compare(입력한비번, result.password)) {
-      return cb(null, result);
-    } else {
-      return cb(null, false, { message: "비번불일치" });
-    }
-  })
-);
-
-passport.serializeUser((user, done) => {
-  //내부코드를 비동기적으로 처리해줌
-  process.nextTick(() => {
-    done(null, { id: user._id, username: user.username });
-  });
-});
-//유저가 보낸 쿠키분석
-passport.deserializeUser(async (user, done) => {
-  let result = await db.collection("user").findOne({ _id: new ObjectId(user.id) });
-  delete result.password;
-  console.log(result);
-  process.nextTick(() => {
-    done(null, result);
-  });
-});
-
 app.get("/login", async (req, res) => {
-  console.log(req.user);
   res.render("login.ejs");
-});
-
-app.post("/login", async (req, res, next) => {
-  passport.authenticate("local", (error, user, info) => {
-    if (error) return res.status(500).json(error);
-    if (!user) return res.status(401).json(info.message);
-    req.logIn(user, (err) => {
-      if (err) return next(err);
-      res.redirect("/");
-    });
-  })(req, res, next);
 });
 
 app.get("/myPage", (req, res) => {
@@ -192,14 +124,35 @@ app.get("/myPage", (req, res) => {
   }
 });
 
+app.post("/register", async (req, res) => {
+  let password = await bcrypt.hash(req.body.password, 10);
+
+  await db.collection("user").insertOne({ username: req.body.username, password: password });
+  res.redirect("/");
+});
 app.get("/register", async (req, res) => {
   res.render("register.ejs");
 });
 
-app.post("/register", async (req, res) => {
-  let password = await bcrypt.hash(req.body.password, 10);
+app.post("/chkDuplication", async (req, res) => {
+  let result = await db.collection("user").findOne({ username: req.body.username });
+  res.send({ result: result });
+  console.log(result);
+});
 
-  console.log(password);
-  await db.collection("user").insertOne({ username: req.body.username, password: password });
-  res.redirect("/");
+app.get("/search", async (req, res) => {
+  let condition = [
+    {
+      $search: {
+        index: "title_index",
+        text: { query: req.query.val, path: "title" },
+      },
+    },
+  ];
+  let result = await db
+    .collection("post")
+    // .find({ $text: { $search: req.query.val } })
+    .aggregate(condition)
+    .toArray();
+  res.render("search.ejs", { posts: result });
 });

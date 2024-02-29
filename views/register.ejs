@@ -11,9 +11,81 @@
 
     <form action="/register" method="POST">
       <h4>회원가입</h4>
-      <input name="username" />
-      <input type="password" name="password" />
-      <button type="submit">전송</button>
+      <div class="gap8">
+        <label for="">아이디</label>
+        <input name="username" onInput="idCheck()" />
+        <span><button class="overlapChk">중복확인</button></span>
+      </div>
+      <span class="idWarning" style="display: none"></span>
+      <div class="gap8">
+        <label for="">비밀번호</label>
+        <input type="password" name="password" />
+      </div>
+      <div class="gap8">
+        <label for="">비밀번호확인</label>
+        <input type="password" name="passwordCheck" onInput="pwCheck2()" />
+      </div>
+      <span class="pwWarning" style="display: none"></span>
+      <button type="submit" disabled>전송</button>
     </form>
+
+    <script>
+      let passwordCheck;
+      let overlapChk = document.querySelector(".overlapChk");
+      let submitBtn = document.querySelector("form > button");
+      let idWarning = document.querySelector(".idWarning");
+      let pwWarning = document.querySelector(".pwWarning");
+
+      function idCheck() {
+        let id = document.getElementsByName("username")[0].value;
+
+        if (id == "") {
+          idWarning.style.display = "block";
+          idWarning.style.color = "red";
+          idWarning.innerText = "필수 입력 값 입니다.";
+        } else {
+          idWarning.style.display = "blcok";
+          idWarning.innerText = "";
+        }
+      }
+
+      overlapChk.addEventListener("click", function (e) {
+        let id = document.getElementsByName("username")[0].value;
+
+        e.preventDefault();
+        fetch("/chkDuplication", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: id }),
+        })
+          .then((r) => r.json())
+          .then((json) => {
+            if (json.result === null && id) {
+              alert("사용할 수 있는 아이디입니다.");
+            } else if (id == "") {
+              alert("필수 입력 값입니다.");
+            } else {
+              alert("중복된 아이디입니다.");
+            }
+          });
+      });
+
+      function pwCheck2() {
+        let pw = document.getElementsByName("password")[0].value;
+        let pwCheck = document.getElementsByName("passwordCheck")[0].value;
+        if (pw == pwCheck) {
+          pwWarning.style.display = "block";
+          pwWarning.innerText = "비밀번호가 일치합니다.";
+          pwWarning.style.color = "green";
+          submitBtn.disabled = false;
+        } else {
+          pwWarning.style.display = "block";
+          pwWarning.innerText = "비밀번호가 일치하지않습니다.";
+          pwWarning.style.color = "red";
+        }
+      }
+    </script>
   </body>
 </html>

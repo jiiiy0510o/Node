@@ -8,23 +8,29 @@
   </head>
   <body>
     <%- include("nav.ejs")%>
+
+      <input type="text" name="" class="search" placeholder="검색어를 입력해주세요"/>
+      <button type="submit" class="searchBtn"> 검색</button>
+
+     
       <% for(let i=0; i<posts.length; i++){ %>
         <div class="listTitle">  
           <h3><a href="/detail/<%=posts[i]._id%>"><%= posts[i].title %></a></h3>
           <h5><%= posts[i].content %></h5>
           <div class="CRUDBtn">
-            <a href="/edit/<%=posts[i]._id%>">✏️</a>
-            <span class="delBtn" data-id="<%=posts[i]._id%>">❌</span>
+ 
+            <%if(posts[i].user){%>
+              <a href="/edit/<%=posts[i]._id%>">✏️</a>
+              <span class="delBtn" data-id="<%=posts[i]._id%>">❌</span>
+              <%}%>
           </div>
         </div>
       <% } %>
-      <!-- <a href="/list/next/<%=posts[0]._id%>">이전</a> -->
-      <a href="/list/next/<%=posts[posts.length -1]._id%>">다음</a>
 
       <script>
-
         let listTitle = document.querySelectorAll(".listTitle");
-        
+        let searchBtn = document.querySelector(".searchBtn");
+
         for(i=0; i<listTitle.length; i++){
           document.querySelectorAll('.delBtn')[i].addEventListener("click", function(e){
      
@@ -39,6 +45,11 @@
             )
           })
         }
+
+        searchBtn.addEventListener("click", function(){
+          let searchText = document.querySelector(".search").value;
+          location.href = "/search?val=" + searchText;
+          })
       </script>
   </body>
 </html>

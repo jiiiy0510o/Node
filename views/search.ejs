@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>리스트</title>
+    <link rel="stylesheet" href="/main.css" />
+  </head>
+  <body>
+    <%- include("nav.ejs")%>
+
+      <input type="text" name="" class="search" placeholder="검색어를 입력해주세요"/>
+      <button type="submit" class="searchBtn"> 검색</button>
+
+        <h4>검색결과</h4>
+      <% for(let i=0; i<posts.length; i++){ %>
+        <div class="listTitle">  
+          <h3><a href="/detail/<%=posts[i]._id%>"><%= posts[i].title %></a></h3>
+          <h5><%= posts[i].content %></h5>
+          <div class="CRUDBtn">
+            <a href="/edit/<%=posts[i]._id%>">✏️</a>
+            <span class="delBtn" data-id="<%=posts[i]._id%>">❌</span>
+          </div>
+        </div>
+      <% } %>
+
+      <script>
+        let searchBtn = document.querySelector(".searchBtn");
+
+        searchBtn.addEventListener("click", function(){
+          let searchText = document.querySelector(".search").value;
+          location.href = "/search?val=" + searchText;
+          })
+      </script>
+  </body>
+</html>

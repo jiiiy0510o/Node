@@ -9,10 +9,17 @@
   <body>
     <%-include("nav.ejs")%>
 
-    <form action="/new-post" method="POST">
+    <form action="/new-post" method="POST" enctype="multipart/form-data" class="wrtieForm">
       <h4>글쓰기</h4>
-      <input name="title" />
-      <input name="content" />
+      <div class="gap8">
+        <label for="">제목</label>
+        <input name="title" />
+      </div>
+      <div class="gap8">
+        <label for="">내용</label>
+        <textarea name="content"></textarea>
+      </div>
+      <input type="file" name="img1" accept="image/*" multiple />
       <button type="submit">전송</button>
     </form>
   </body>

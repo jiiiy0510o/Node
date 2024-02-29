@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>수정하기</title>
+    <link rel="stylesheet" href="/main.css" />
   </head>
   <body>
     <%- include("nav.ejs")%>
 
-    <form action="/edit?_method=PUT" method="POST">
+    <form action="/edit?_method=PUT" method="POST" class="wrtieForm">
       <h4>수정하기</h4>
       <input name="id" value="<%=result._id%>" />
       <input name="title" value="<%=result.title%>" />
