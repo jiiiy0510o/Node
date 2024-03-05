@@ -8,16 +8,46 @@
   </head>
   <body>
     <%-include("nav.ejs")%>
-    <div class="content">
+    <div class="content" data-id="<%=result._id%>">
       <%if(result.username){%>
       <h5><strong><%=result.username%></strong>이 작성</h5>
       <%}%>
       <h3><%= result.title %></h3>
-      <h6><%= result.content %></h6>
+      <h6><%= result.comment %></h6>
     </div>
 
+    <div class="commentBox">
+      <button>댓글<span>0</span></button>
+      <ul class="comment">
+        <% for(let i=0; i<comment.length; i++){%>
+          <li><strong><%=comment[i].username%></strong><span>00:00:00</span>
+          <p><%=comment[i].comment%></p></li>
+         <%}%>
+      </ul>
+      <textarea placeholder="댓글을 입력해주세요"></textarea>
+      <button data-user="<%=result.username%>">등록</button>
+    </div>
     <script>
       document.querySelector(".content").insertAdjacentHTML("beforeend", `<img src="<%- result.img %>"/>`);
+      let commentBtn = document.querySelector(".commentBox button:last-child");
+
+      commentBtn.addEventListener("click", function (e) {
+        let commentText = document.querySelector("textarea").value;
+
+        fetch("/comment?user=" + e.currentTarget.dataset.user + "&id=" + document.querySelector(".content").dataset.id, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            comment: commentText,
+          }),
+        })
+          .then((r) => r.text())
+          .then((r) => {
+            let comment = e.currentTarget.parentElement;
+          });
+      });
     </script>
   </body>
 </html>

@@ -12,7 +12,6 @@
       <input type="text" name="" class="search" placeholder="검색어를 입력해주세요"/>
       <button type="submit" class="searchBtn"> 검색</button>
 
-     
       <% for(let i=0; i<posts.length; i++){ %>
         <div class="listTitle">  
           <h3><a href="/detail/<%=posts[i]._id%>"><%= posts[i].title %></a></h3>
@@ -41,7 +40,8 @@
                 'Content-Type':'application/json'
               },
             }).then((r)=>r.text()).then((r)=>
-            e.target.parentElement.parentElement.style.display = "none"
+            
+             e.target.parentElement.parentElement.style.display = "none"
             )
           })
         }

@@ -1,11 +1,7 @@
 const express = require("express");
-const app = express();
 const passport = require("../passport");
 
 const router = express.Router();
-
-app.use(passport.session());
-app.use(passport.initialize());
 
 router.post(
   "/login",

@@ -104,10 +104,62 @@ body {
     transform: translateX(50%);
     bottom: 12px;
   }
-
   .idWarning,
   .pwWarning {
     text-align: center;
     font-size: 0.92rem;
+  }
+  .commentBox {
+    position: relative;
+    background-color: #faf7f7;
+    padding: 20px;
+    margin-top: 60px;
+  }
+  .commentBox button {
+    position: absolute;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  .commentBox button:first-child {
+    top: -48px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+  }
+  .commentBox button span {
+    color: rgb(255, 38, 0);
+    padding-left: 8px;
+  }
+  .commentBox .comment {
+    list-style: none;
+  }
+  .commentBox textarea {
+    width: 100%;
+    height: 80px;
+    padding: 8px;
+    box-sizing: border-box;
+    border: none;
+    resize: none;
+  }
+  .commentBox textarea + button {
+    right: 32px;
+    bottom: 32px;
+    border: none;
+    background-color: rgb(255, 83, 71);
+    color: white;
+  }
+  .comment {
+    margin: 0;
+    padding-left: 12px;
+    padding-bottom: 30px;
+  }
+  .comment li {
+    padding: 4px 0;
+  }
+  .comment p {
+    margin: 0;
+    padding: 4px 0;
+  }
+  .comment li span {
+    padding: 0 8px;
   }
 }

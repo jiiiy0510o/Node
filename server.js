@@ -1,10 +1,14 @@
 //express 프레임워크 실행
 const express = require("express");
 const app = express();
-const { MongoClient, ObjectId } = require("mongodb");
+const { ObjectId } = require("mongodb");
+const session = require("express-session");
+const passport = require("passport");
+const MongoStore = require("connect-mongo");
+
 //PUT/DELETE 요청 가능
 const methodOverride = require("method-override");
-
+const bcrypt = require("bcrypt");
 const { S3Client } = require("@aws-sdk/client-s3");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
@@ -17,6 +21,23 @@ app.set("view engine", "ejs");
 //req.body 쓰려면 필수
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//express-session 미들웨어 설정
+app.use(
+  session({
+    secret: "암호화에 쓸 비번",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 60 * 60 * 1000 },
+    store: MongoStore.create({
+      mongoUrl: process.env.DB_URL,
+      dbName: "forum",
+    }),
+  })
+);
+
+app.use(passport.session());
+app.use(passport.initialize());
 
 //라우터 설정
 app.use("/", require("./routes/list.js"));
@@ -66,7 +87,12 @@ app.get("/", (req, res) => {
 app.get("/detail/:id", async (req, res) => {
   try {
     let result = await db.collection("post").findOne({ _id: new ObjectId(req.params.id) });
-    res.render("detail.ejs", { result: result });
+    let comment = await db
+      .collection("comments")
+      .find({ parentId: new ObjectId(req.params.id) })
+      .toArray();
+
+    res.render("detail.ejs", { result: result, comment: comment });
   } catch (e) {
     res.status(404).send("URL ERROR");
   }
@@ -82,7 +108,6 @@ app.get("/write", (req, res) => {
   }
 });
 app.post("/new-post", async (req, res) => {
-  console.log("하이" + req.user);
   upload.single("img1")(req, res, async (err) => {
     if (err) return res.send("img 업로드 에러");
     //이미지 업로드 완료시 실행할 코드
@@ -155,4 +180,14 @@ app.get("/search", async (req, res) => {
     .aggregate(condition)
     .toArray();
   res.render("search.ejs", { posts: result });
+});
+
+app.post("/comment", async (req, res) => {
+  await db.collection("comments").insertOne({
+    parentId: new ObjectId(req.query.id),
+    username: req.query.user,
+    comment: req.body.comment,
+    time: new Date(),
+  });
+  res.redirect("back");
 });

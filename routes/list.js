@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 let db;
-let connectDB = require("./../database.js");
+let connectDB = require("./../database");
 
 connectDB
   .then((client) => {
