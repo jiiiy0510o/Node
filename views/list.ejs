@@ -5,30 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>리스트</title>
     <link rel="stylesheet" href="/main.css" />
+    <script src="https://kit.fontawesome.com/06a873e6b2.js" crossorigin="anonymous"></script>
   </head>
   <body>
     <%- include("nav.ejs")%>
-
-      <input type="text" name="" class="search" placeholder="검색어를 입력해주세요"/>
-      <button type="submit" class="searchBtn"> 검색</button>
-
+      <table>
+        <tr class="indexRow">
+          <th>제목</th>
+          <th>글쓴이</th>
+          <th>작성일</th>
+        </tr>
+       
       <% for(let i=0; i<posts.length; i++){ %>
-        <div class="listTitle">  
-          <h3><a href="/detail/<%=posts[i]._id%>"><%= posts[i].title %></a></h3>
-          <h5><%= posts[i].content %></h5>
-          <div class="CRUDBtn">
- 
-            <%if(posts[i].user){%>
-              <a href="/edit/<%=posts[i]._id%>">✏️</a>
-              <span class="delBtn" data-id="<%=posts[i]._id%>">❌</span>
+        <tr class="titleRow">
+          <td>
+            <h4><a href="/detail/<%=posts[i]._id%>"><%= posts[i].title %></a></h4>
+            <%if(posts[i].img){%>
+              <span><i class="fa-regular fa-images"></i></span>
+            <%}%>
+          </td>
+          <td>
+            <h5 class="username"><%=posts[i].username%></h5>
+          </td>
+          <td>
+            <div class="date">
+              <%if(posts[i].user){%>
+                <h5><%=posts[i].day%></h5>
               <%}%>
-          </div>
-        </div>
+            </div>
+          </td>  
+        </tr>
       <% } %>
+
+      </table>
+
+      <div class="searchBox">
+        <input type="text" name="" class="search" placeholder="검색어를 입력해주세요"/>
+        <button type="submit" class="searchBtn"> 검색</button>
+      </div>
 
       <script>
         let listTitle = document.querySelectorAll(".listTitle");
         let searchBtn = document.querySelector(".searchBtn");
+        let userColorRow = document.querySelector(".titleRow");
 
         for(i=0; i<listTitle.length; i++){
           document.querySelectorAll('.delBtn')[i].addEventListener("click", function(e){

@@ -80,6 +80,7 @@ connectDB
 
 // 페이지 접속시 응답(라우팅)
 app.get("/", (req, res) => {
+  console.log(req.user);
   //File 전송시
   res.sendFile(__dirname + "/index.html");
 });
@@ -99,14 +100,15 @@ app.get("/detail/:id", async (req, res) => {
 });
 
 app.get("/write", (req, res) => {
-  console.log(req.user);
-
   if (req.user == undefined) {
     res.send("로그인해주세요");
   } else {
     res.render("write.ejs");
   }
 });
+
+let days = require("./date.js");
+
 app.post("/new-post", async (req, res) => {
   upload.single("img1")(req, res, async (err) => {
     if (err) return res.send("img 업로드 에러");
@@ -123,19 +125,23 @@ app.post("/new-post", async (req, res) => {
           title: req.body.title,
           content: req.body.content,
           img: req.file ? req.file.location : "",
+          day: days.format,
         });
         res.redirect("/list");
       }
     } catch (e) {
-      console.log(e);
       res.status(500).send("서버에러");
     }
   });
 });
+
 app.delete("/delete", async (req, res) => {
+  console.log(req.query);
   await db.collection("post").deleteOne({ _id: new ObjectId(req.query.id), user: new ObjectId(req.user._id) });
+  await db.collection("comments").deleteMany({ parentId: new ObjectId(req.query.id) });
   res.send("삭제완료");
 });
+
 app.get("/login", async (req, res) => {
   res.render("login.ejs");
 });
@@ -187,7 +193,9 @@ app.post("/comment", async (req, res) => {
     parentId: new ObjectId(req.query.id),
     username: req.query.user,
     comment: req.body.comment,
-    time: new Date(),
+    date: days.format,
+    time: days.time,
   });
+
   res.redirect("back");
 });

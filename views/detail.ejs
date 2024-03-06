@@ -5,22 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="/main.css" />
+    <script src="https://kit.fontawesome.com/06a873e6b2.js" crossorigin="anonymous"></script>
+
   </head>
   <body>
     <%-include("nav.ejs")%>
     <div class="content" data-id="<%=result._id%>">
       <%if(result.username){%>
-      <h5><strong><%=result.username%></strong>이 작성</h5>
+        <h5>작성자&nbsp;:&nbsp;<strong><%=result.username%></strong><i class="fa-regular fa-comments"></i></h5>
       <%}%>
-      <h3><%= result.title %></h3>
-      <h6><%= result.comment %></h6>
+      <h2><%= result.title %></h2>
+      <h5><%= result.content %></h5>
     </div>
 
     <div class="commentBox">
-      <button>댓글<span>0</span></button>
+      <button>댓글<span><%=comment.length%></span></button>
       <ul class="comment">
         <% for(let i=0; i<comment.length; i++){%>
-          <li><strong><%=comment[i].username%></strong><span>00:00:00</span>
+          <li><strong><%=comment[i].username%></strong><span><%=comment[i].date%>&nbsp;<%=comment[i].time%></span>
           <p><%=comment[i].comment%></p></li>
          <%}%>
       </ul>
@@ -28,8 +30,11 @@
       <button data-user="<%=result.username%>">등록</button>
     </div>
     <script>
-      document.querySelector(".content").insertAdjacentHTML("beforeend", `<img src="<%- result.img %>"/>`);
+      let commentShow = document.querySelector(".commentBox>button:first-child");
       let commentBtn = document.querySelector(".commentBox button:last-child");
+
+      document.querySelector(".content").insertAdjacentHTML("beforeend", `<img src="<%- result.img %>"/>`);
+
 
       commentBtn.addEventListener("click", function (e) {
         let commentText = document.querySelector("textarea").value;

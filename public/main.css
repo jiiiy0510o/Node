@@ -4,40 +4,87 @@ body {
     text-decoration: none;
     padding: 0 16px;
   }
-  h3 {
-    margin-top: 0;
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    font-weight: normal;
   }
-  h5 {
-    margin-bottom: 0;
-  }
+
   nav {
     display: flex;
     align-items: center;
     height: 60px;
     border-bottom: 3px double #999;
+    position: relative;
   }
-  nav a:first-child {
+  nav > a:first-child {
     width: 120px;
     font-weight: 900;
     font-size: 30px;
   }
-
-  .listTitle {
-    margin: 6px 12px;
-    padding: 6px;
-    border-bottom: 3px double #333;
-    position: relative;
-  }
-
-  .CRUDBtn {
-    display: flex;
+  nav .rightArea {
     position: absolute;
-    top: 8px;
     right: 8px;
-    gap: 8px;
   }
-  .CRUDBtn span {
-    cursor: pointer;
+  /* nav .rightArea a:last-child {
+    display: none;
+  } */
+  table {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    margin: 40px 0;
+    width: 100%;
+  }
+  table .indexRow {
+    border-top: 2px solid #ccc;
+    border-bottom: 1px solid #ddd;
+  }
+  table .indexRow th {
+    padding: 8px 0;
+  }
+  table .titleRow {
+    border-bottom: 1px solid #eee;
+  }
+  table .titleRow td {
+    padding: 8px 0;
+  }
+  table .titleRow td:first-child {
+    padding-left: 12px;
+    width: 70%;
+  }
+  table .titleRow td:first-child h4 {
+    display: inline;
+  }
+  table .titleRow td:first-child span i {
+    color: #aaa;
+  }
+  table .titleRow td:nth-child(2) {
+    width: 16%;
+    text-align: center;
+  }
+  table .titleRow td:last-child {
+    width: 14%;
+    text-align: center;
+  }
+  .searchBox {
+    width: 260px;
+    margin: 0 auto;
+  }
+  .searchBox .search {
+    width: 176px;
+    margin: 0 auto;
+    padding: 4px 12px;
+    border: none;
+    border-bottom: 1px solid #999;
+  }
+  .searchBox .searchBtn {
+    background-color: #ddd;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 2px;
   }
   .content {
     padding: 20px;
@@ -46,21 +93,23 @@ body {
     width: 360px;
   }
   .content h5 {
-    text-align: end;
+    display: flex;
+    align-items: center;
+    padding: 12px;
   }
-
-  .search {
-    width: 180px;
-    margin: 12px 0;
-    padding: 4px 12px;
-    border: none;
-    border-bottom: 1px solid #999;
+  .content h5 i {
+    padding-left: 8px;
+    display: block;
+    width: 12px;
+    height: 12px;
+    transition: 0.2s;
   }
-  .searchBtn {
-    background-color: #ddd;
-    border: none;
-    padding: 4px 12px;
-    border-radius: 2px;
+  .content h5 i:hover {
+    cursor: pointer;
+    color: tomato;
+  }
+  .content h5:first-child {
+    justify-content: end;
   }
 
   .writeForm {
@@ -85,7 +134,10 @@ body {
   }
   .writeForm .gap8 label {
     width: 120px;
-    text-align: right;
+    text-align: center;
+  }
+  .writeForm .gap8 input {
+    width: 600px;
   }
   .writeForm textarea {
     width: 600px;
@@ -161,5 +213,13 @@ body {
   }
   .comment li span {
     padding: 0 8px;
+  }
+  .messageContainer {
+    background: #444;
+  }
+  .messageContainer div {
+    width: 300px;
+    height: 500px;
+    border-radius: 10px;
   }
 }
