@@ -41,16 +41,16 @@ router.get("/list/:id", async (req, res) => {
   res.render("list.ejs", { posts: result });
 });
 
-router.get("/list/next/:id", async (req, res) => {
-  let result = await db
-    .collection("post")
-    .find({ _id: { $gt: new ObjectId(req.params.id) } })
-    //skip은 대용량 처리시 좋지 않음
-    // .skip((req.params.id - 1) * 5)
-    .limit(5)
-    .toArray();
+// router.get("/list/next/:id", async (req, res) => {
+//   let result = await db
+//     .collection("post")
+//     .find({ _id: { $gt: new ObjectId(req.params.id) } })
+//     //skip은 대용량 처리시 좋지 않음
+//     // .skip((req.params.id - 1) * 5)
+//     .limit(5)
+//     .toArray();
 
-  res.render("list.ejs", { posts: result });
-});
+//   res.render("list.ejs", { posts: result });
+// });
 
 module.exports = router;

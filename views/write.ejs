@@ -10,17 +10,15 @@
     <%-include("nav.ejs")%>
 
     <form action="/new-post" method="POST" enctype="multipart/form-data" class="writeForm">
-      <h4>글쓰기</h4>
+      <h3>글쓰기</h3>
       <div class="gap8">
-        <label for="">제목</label>
-        <input name="title" />
+        <input type="text" name="title" placeholder="제목을 입력하세요" />
       </div>
       <div class="gap8">
-        <label for="">내용</label>
         <textarea name="content"></textarea>
       </div>
       <input type="file" name="img1" accept="image/*" multiple />
-      <button type="submit">전송</button>
+      <button class="submitBtn" type="submit">전송</button>
     </form>
   </body>
 </html>

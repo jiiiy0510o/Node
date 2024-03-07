@@ -1,3 +1,4 @@
+/* 공통 */
 body {
   a {
     color: inherit;
@@ -11,8 +12,41 @@ body {
   h6 {
     margin: 0;
     font-weight: normal;
+    text-align: center;
   }
-
+  form:not(.messageBox form) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    height: 360px;
+    padding: 12px;
+  }
+  form h3 {
+    padding-bottom: 20px;
+  }
+  input,
+  textarea {
+    border: 1px solid #ddd;
+    padding: 4px;
+  }
+  textarea {
+    resize: none;
+  }
+  label {
+    font-size: 0.86rem;
+    width: 120px;
+    text-align: right;
+  }
+  button,
+  .infoBar .editDelBtn a {
+    width: 80px;
+    cursor: pointer;
+    padding: 4px 12px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+  }
   nav {
     display: flex;
     align-items: center;
@@ -29,15 +63,28 @@ body {
     position: absolute;
     right: 8px;
   }
-  /* nav .rightArea a:last-child {
-    display: none;
-  } */
   table {
     border-collapse: collapse;
     box-sizing: border-box;
     margin: 40px 0;
     width: 100%;
   }
+  .gap8 {
+    gap: 8px;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    width: 400px;
+    padding: 4px 0;
+  }
+  .submitBtn {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+  }
+
+  /* 개별 */
   table .indexRow {
     border-top: 2px solid #ccc;
     border-bottom: 1px solid #ddd;
@@ -70,91 +117,64 @@ body {
     text-align: center;
   }
   .searchBox {
-    width: 260px;
+    width: 300px;
     margin: 0 auto;
   }
-  .searchBox .search {
+  .searchBox input {
     width: 176px;
-    margin: 0 auto;
-    padding: 4px 12px;
     border: none;
-    border-bottom: 1px solid #999;
+    border-bottom: 1px solid #ddd;
   }
-  .searchBox .searchBtn {
+  .searchBox button {
     background-color: #ddd;
-    border: none;
-    padding: 4px 12px;
-    border-radius: 2px;
+  }
+  .infoBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
+  }
+  .infoBar .editDelBtn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .infoBar .editDelBtn a {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 0.86rem;
   }
   .content {
     padding: 20px;
   }
-  .content img {
-    width: 360px;
-  }
   .content h5 {
     display: flex;
     align-items: center;
-    padding: 12px;
+    padding: 12px 0;
   }
-  .content h5 i {
-    padding-left: 8px;
-    display: block;
-    width: 12px;
-    height: 12px;
-    transition: 0.2s;
+  .content .substance {
+    padding: 24px 12px;
   }
-  .content h5 i:hover {
-    cursor: pointer;
-    color: tomato;
+  .content img {
+    width: 360px;
   }
-  .content h5:first-child {
-    justify-content: end;
-  }
-
-  .writeForm {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    position: relative;
-    height: 320px;
-    padding: 12px;
-    border-radius: 10px;
-  }
-  .writeForm h4 {
-    text-align: center;
-    font-size: 20px;
-    letter-spacing: 1px;
-  }
-  .writeForm .gap8 {
-    display: flex;
-    gap: 8px;
-    margin: 0 auto;
-    width: 400px;
-  }
-  .writeForm .gap8 label {
-    width: 120px;
-    text-align: center;
-  }
-  .writeForm .gap8 input {
+  .writeForm input[type="text"] {
     width: 600px;
+    border: none;
+    border-bottom: 1px solid #ddd;
   }
   .writeForm textarea {
     width: 600px;
     height: 120px;
-    resize: none;
   }
   .writeForm input[type="file"] {
     position: absolute;
     right: 0px;
     bottom: 52px;
-  }
-  .writeForm button[type="submit"] {
-    width: 100px;
-    position: absolute;
-    right: 50%;
-    transform: translateX(50%);
-    bottom: 12px;
+    border: none;
   }
   .idWarning,
   .pwWarning {
@@ -169,13 +189,9 @@ body {
   }
   .commentBox button {
     position: absolute;
-    padding: 8px 12px;
-    cursor: pointer;
   }
   .commentBox button:first-child {
     top: -48px;
-    background-color: #fff;
-    border: 1px solid #ddd;
   }
   .commentBox button span {
     color: rgb(255, 38, 0);
@@ -214,12 +230,41 @@ body {
   .comment li span {
     padding: 0 8px;
   }
-  .messageContainer {
-    background: #444;
+  .messageCon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 60px;
   }
-  .messageContainer div {
-    width: 300px;
+  .messageCon > .messageBox {
+    width: 400px;
     height: 500px;
     border-radius: 10px;
+    z-index: 100;
+    background-color: #fff;
+    border: 3px double #bbb;
+    position: relative;
+    box-sizing: border-box;
+    box-shadow: 5px 5px 20px 5px #ddd;
+  }
+  .messageCon .messageBox form {
+    border-top: 1px solid #bbb;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 8px 12px;
+    box-sizing: border-box;
+  }
+  .messageCon .messageBox form input {
+    padding: 4px;
+    width: 310px;
+  }
+  .messageCon .messageBox form button {
+    border: 0;
+    width: 40px;
+    color: #bbb;
+  }
+  .messageCon .messageBox form button:hover {
+    color: tomato;
   }
 }

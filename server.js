@@ -36,8 +36,8 @@ app.use(
   })
 );
 
-app.use(passport.session());
 app.use(passport.initialize());
+app.use(passport.session());
 
 //라우터 설정
 app.use("/", require("./routes/list.js"));
@@ -77,25 +77,30 @@ connectDB
   .catch((err) => {
     console.log(err);
   });
+// 미들웨어로서 nav.ejs 파일을 렌더링하여 모든 응답에 포함
+app.use((req, res, next) => {
+  res.locals.user = req.user; // 현재 사용자 정보를 저장하여 템플릿에서 사용 가능하도록 함
+  res.locals.nav = "nav";
+  next();
+});
 
 // 페이지 접속시 응답(라우팅)
 app.get("/", (req, res) => {
-  console.log(req.user);
-  //File 전송시
   res.sendFile(__dirname + "/index.html");
 });
 
 app.get("/detail/:id", async (req, res) => {
   try {
+    let loginUser = req.user.username;
     let result = await db.collection("post").findOne({ _id: new ObjectId(req.params.id) });
     let comment = await db
       .collection("comments")
       .find({ parentId: new ObjectId(req.params.id) })
       .toArray();
 
-    res.render("detail.ejs", { result: result, comment: comment });
+    res.render("detail.ejs", { result: result, comment: comment, loginUser: loginUser });
   } catch (e) {
-    res.status(404).send("URL ERROR");
+    res.status(404).send("회원에게만 공개된 게시글입니다.");
   }
 });
 
@@ -136,7 +141,6 @@ app.post("/new-post", async (req, res) => {
 });
 
 app.delete("/delete", async (req, res) => {
-  console.log(req.query);
   await db.collection("post").deleteOne({ _id: new ObjectId(req.query.id), user: new ObjectId(req.user._id) });
   await db.collection("comments").deleteMany({ parentId: new ObjectId(req.query.id) });
   res.send("삭제완료");
@@ -198,4 +202,13 @@ app.post("/comment", async (req, res) => {
   });
 
   res.redirect("back");
+});
+
+app.get("/message", async (req, res) => {
+  let partner = req.query.id;
+  let message = await db.collection("message").find().toArray();
+  console.log(req.user.username);
+
+  console.log(message);
+  res.render("message.ejs", { partner: partner });
 });

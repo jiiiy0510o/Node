@@ -40,30 +40,12 @@
       </table>
 
       <div class="searchBox">
-        <input type="text" name="" class="search" placeholder="검색어를 입력해주세요"/>
-        <button type="submit" class="searchBtn"> 검색</button>
+        <input type="text" name="" placeholder="검색어를 입력해주세요"/>
+        <button type="submit"> 검색</button>
       </div>
 
       <script>
-        let listTitle = document.querySelectorAll(".listTitle");
-        let searchBtn = document.querySelector(".searchBtn");
-        let userColorRow = document.querySelector(".titleRow");
-
-        for(i=0; i<listTitle.length; i++){
-          document.querySelectorAll('.delBtn')[i].addEventListener("click", function(e){
-     
-            // 새로고침없이 서버에 요청
-            fetch('/delete?id=' + e.currentTarget.dataset.id, {
-              method:"DELETE",
-              headers:{
-                'Content-Type':'application/json'
-              },
-            }).then((r)=>r.text()).then((r)=>
-            
-             e.target.parentElement.parentElement.style.display = "none"
-            )
-          })
-        }
+        let searchBtn = document.querySelector(".searchBox button");
 
         searchBtn.addEventListener("click", function(){
           let searchText = document.querySelector(".search").value;

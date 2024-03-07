@@ -10,12 +10,22 @@
   </head>
   <body>
     <%-include("nav.ejs")%>
-    <div class="content" data-id="<%=result._id%>">
-      <%if(result.username){%>
-        <h5>작성자&nbsp;:&nbsp;<strong><%=result.username%></strong><i class="fa-regular fa-comments"></i></h5>
+    <div class="infoBar">
+      <h5>작성자&nbsp;:&nbsp;<strong><%=result.username%></strong></h5>
+      <div class="editDelBtn">
+      <%if(result.username == loginUser){%>
+          <a href="/edit/<%=result._id%>">수정</a>
+          <button class="delBtn" data-id ="<%=result._id%>">삭제</button>
+      <%} else {%>
+          <button class="messageBtn" data-user ="<%=result.username%>" >쪽지</button>
       <%}%>
+      </div>
+    </div>
+
+    <div class="content" data-id="<%=result._id%>">
       <h2><%= result.title %></h2>
-      <h5><%= result.content %></h5>
+      </h5>
+      <h5 class="substance"><%= result.content %></h5>
     </div>
 
     <div class="commentBox">
@@ -30,11 +40,36 @@
       <button data-user="<%=result.username%>">등록</button>
     </div>
     <script>
+      let deletePost = document.querySelector(".delBtn")
+      let message = document.querySelector(".messageBtn")
       let commentShow = document.querySelector(".commentBox>button:first-child");
       let commentBtn = document.querySelector(".commentBox button:last-child");
 
-      document.querySelector(".content").insertAdjacentHTML("beforeend", `<img src="<%- result.img %>"/>`);
+      if(deletePost){
+        deletePost.addEventListener("click", function(e){
+        fetch('/delete?id=' + e.currentTarget.dataset.id,{
+          method:"DELETE",
+          header:{
+            'Content-Type':"application/json"
+          },
+        }).then((r)=>r.text()).then((r)=>{
+          window.location.href = '/list';
+        })
+        })
+      }
+      if(message){
+        message.addEventListener("click", function(e){
+          console.log("R")
+        fetch('/message?partner=',{
+          method:"post",
+          header:{
+            'Content-Type':"application/json"
+          },
+        }).then((r)=>r.text()).then((r)=>{})
+        })
+      }
 
+      document.querySelector(".content").insertAdjacentHTML("beforeend", `<img src="<%- result.img %>"/>`);
 
       commentBtn.addEventListener("click", function (e) {
         let commentText = document.querySelector("textarea").value;

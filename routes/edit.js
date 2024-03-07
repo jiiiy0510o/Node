@@ -23,6 +23,7 @@ router.put("/edit", async (req, res) => {
 
 router.get("/edit/:id", async (req, res) => {
   let result = await db.collection("post").findOne({ _id: new ObjectId(req.params.id) });
+
   res.render("edit.ejs", { result: result });
 });
 
