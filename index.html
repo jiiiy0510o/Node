@@ -4,20 +4,56 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="/css/main.css" />
     <script src="https://kit.fontawesome.com/06a873e6b2.js" crossorigin="anonymous"></script>
   </head>
   <body>
-    <nav>
-      <a href="/"><i>###</i></a>
-      <a href="/list">글목록</a>
-      <a href="/write">글쓰기</a>
-      <div class="rightArea">
-        <a href="/myPage">MY PAGE</a>
-        <a href="/message"><i class="fa-regular fa-comments"></i></a>
-        <a href="/login">LOG IN</a>
-        <a href="/register">회원가입</a>
+    <div class="loginPage">
+      <div class="loginBox">
+        <div class="logo">
+          <img src="/img/logo.png" alt="" />
+        </div>
+        <form action="/login" method="POST">
+          <input type="text" name="username" oninput="checkInput()" placeholder="아이디" />
+
+          <div class="showPw">
+            <input type="password" name="password" oninput="checkInput()" placeholder="비밀번호" />
+            <span>비밀번호 표시</span>
+          </div>
+
+          <button class="submitBtn" type="submit" disabled>로그인</button>
+        </form>
       </div>
-    </nav>
+      <div class="registerBox">
+        <p>계정이 없으신가요? <a href="/register">가입하기</a></p>
+      </div>
+    </div>
+
+    <script>
+      let hiddenPw = document.querySelector(".showPw input");
+      let showBtn = document.querySelector(".showPw span");
+      let loginBtn = document.querySelector(".submitBtn");
+      let idval = document.querySelector("form input[name=username]");
+
+      function checkInput() {
+        let idlength = idval.value.length;
+        let pwlength = hiddenPw.value.length;
+        if (idlength !== 0 && pwlength < 5) {
+          loginBtn.disabled = true;
+        } else {
+          loginBtn.disabled = false;
+        }
+      }
+
+      showBtn.addEventListener("click", function () {
+        if (this.innerText == "비밀번호 표시") {
+          hiddenPw.type = "text";
+          this.innerText = "숨기기";
+        } else {
+          hiddenPw.type = "password";
+          this.innerText = "비밀번호 표시";
+        }
+      });
+    </script>
   </body>
 </html>

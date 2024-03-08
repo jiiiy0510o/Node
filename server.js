@@ -146,10 +146,6 @@ app.delete("/delete", async (req, res) => {
   res.send("삭제완료");
 });
 
-app.get("/login", async (req, res) => {
-  res.render("login.ejs");
-});
-
 app.get("/myPage", (req, res) => {
   if (!req.user) {
     res.send("로그인해주세요");
@@ -172,7 +168,6 @@ app.get("/register", async (req, res) => {
 app.post("/chkDuplication", async (req, res) => {
   let result = await db.collection("user").findOne({ username: req.body.username });
   res.send({ result: result });
-  console.log(result);
 });
 
 app.get("/search", async (req, res) => {
@@ -207,7 +202,6 @@ app.post("/comment", async (req, res) => {
 app.get("/message", async (req, res) => {
   let partner = req.query.id;
   let message = await db.collection("message").find().toArray();
-  console.log(req.user.username);
 
   console.log(message);
   res.render("message.ejs", { partner: partner });

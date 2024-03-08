@@ -4,53 +4,60 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>리스트</title>
-    <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="/css/main.css" />
     <script src="https://kit.fontawesome.com/06a873e6b2.js" crossorigin="anonymous"></script>
   </head>
-  <body>
+  <body style="display: flex;">
     <%- include("nav.ejs")%>
-      <table>
-        <tr class="indexRow">
-          <th>제목</th>
-          <th>글쓴이</th>
-          <th>작성일</th>
-        </tr>
-       
-      <% for(let i=0; i<posts.length; i++){ %>
-        <tr class="titleRow">
-          <td>
-            <h4><a href="/detail/<%=posts[i]._id%>"><%= posts[i].title %></a></h4>
-            <%if(posts[i].img){%>
-              <span><i class="fa-regular fa-images"></i></span>
+    <div class="posts">
+      <%for(let i =0; i<posts.length; i++){%>
+        <div class="post">
+          <div class="infoBar">
+            <h4><%=posts[i].username%></h4>
+            <div class="editDelBtn">
+            <%if(posts[i].username == loginUser){%>
+                <a href="/edit/<%=posts[i]._id%>">수정</a>
+                <button class="delBtn" data-id ="<%=posts[i]._id%>">삭제</button>
+            <%} else {%>
+                <button class="messageBtn" data-user ="<%=posts[i].username%>" ><i class="fa-regular fa-paper-plane"></i></button>
             <%}%>
-          </td>
-          <td>
-            <h5 class="username"><%=posts[i].username%></h5>
-          </td>
-          <td>
-            <div class="date">
-              <%if(posts[i].user){%>
-                <h5><%=posts[i].day%></h5>
-              <%}%>
             </div>
-          </td>  
-        </tr>
-      <% } %>
+          </div>
+      
+          <div class="content" data-id="<%=posts[i]._id%>">
+            <h2><%= posts[i].title %></h2>
+            </h5>
+            <h5 class="substance"><%= posts[i].content %></h5>
+          </div>
+      
+          <div class="commentBox">
+            <button><i class="fa-regular fa-comment"></i><span><%=comment.length%></span></button>
+            <ul class="comment">
+              <% for(let i=0; i<comment.length; i++){%>
+                <li><strong><%=comment[i].username%></strong><span><%=comment[i].date%>&nbsp;<%=comment[i].time%></span>
+                <p><%=comment[i].comment%></p></li>
+               <%}%>
+            </ul>
+            <div class="commentLine">
+              <textarea placeholder="댓글 달기" oninput="onInput()"></textarea>
+              <button data-user="<%=posts.username%>">게시</button>
+            </div>
+          </div>
+        </div>
 
-      </table>
-
-      <div class="searchBox">
+        <%}%>
+    </div>
+      <!-- <div class="searchBox">
         <input type="text" name="" placeholder="검색어를 입력해주세요"/>
         <button type="submit"> 검색</button>
-      </div>
+      </div> -->
 
       <script>
         let searchBtn = document.querySelector(".searchBox button");
-
         searchBtn.addEventListener("click", function(){
           let searchText = document.querySelector(".search").value;
           location.href = "/search?val=" + searchText;
-          })
+          })          
       </script>
   </body>
 </html>

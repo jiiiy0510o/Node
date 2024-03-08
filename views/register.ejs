@@ -3,56 +3,49 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>리스트</title>
-    <link rel="stylesheet" href="/main.css" />
+    <title>가입하기</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <script src="https://kit.fontawesome.com/06a873e6b2.js" crossorigin="anonymous"></script>
   </head>
   <body>
-    <%- include("nav.ejs")%>
-
-    <form action="/register" method="POST">
-      <h3>회원가입</h3>
-      <div class="gap8">
-        <label for="">아이디</label>
-        <input type="text" name="username" onInput="idCheck()" />
-        <span><button class="overlapChk">확인</button></span>
+    <div class="registerPage">
+      <div class="registerBox">
+        <div class="logo">
+          <img src="/img/logo.png" alt="" />
+        </div>
+        <form action="/register" method="POST">
+          <h5>친구들의 사진과 동영상을 보려면 가입하세요.</h5>
+          <div class="overChk">
+            <input type="text" name="nickname" placeholder="닉네임" />
+            <span> <i class="fa-regular fa-circle-check"></i></span>
+          </div>
+          <div class="overChk">
+            <input type="text" name="username" placeholder="아이디" />
+            <button class="overlapChk">확인</button>
+          </div>
+          <input type="password" name="password" placeholder="비밀번호" />
+          <div class="overChk">
+            <input type="password" name="passwordCheck" onInput="pwCheck2()" placeholder="비밀번호확인" />
+            <span><i class="fa-regular fa-circle-check"></i></span>
+          </div>
+          <button class="submitBtn" type="submit">가입</button>
+        </form>
       </div>
-      <span class="idWarning" style="display: none"></span>
-      <div class="gap8">
-        <label for="">비밀번호</label>
-        <input type="password" name="password" />
+      <div class="loginBox">
+        <p>계정이 있으신가요? <a href="/">로그인</a></p>
       </div>
-      <div class="gap8">
-        <label for="">비밀번호확인</label>
-        <input type="password" name="passwordCheck" onInput="pwCheck2()" />
-      </div>
-      <span class="pwWarning" style="display: none"></span>
-      <button class="submitBtn" type="submit" disabled>전송</button>
-    </form>
+    </div>
 
     <script>
       let passwordCheck;
       let overlapChk = document.querySelector(".overlapChk");
-      let submitBtn = document.querySelector("form > button");
-      let idWarning = document.querySelector(".idWarning");
-      let pwWarning = document.querySelector(".pwWarning");
-
-      function idCheck() {
-        let id = document.getElementsByName("username")[0].value;
-
-        if (id == "") {
-          idWarning.style.display = "block";
-          idWarning.style.color = "red";
-          idWarning.innerText = "필수 입력 값 입니다.";
-        } else {
-          idWarning.style.display = "blcok";
-          idWarning.innerText = "";
-        }
-      }
+      let submitBtn = document.querySelector("form > .submitBtn");
 
       overlapChk.addEventListener("click", function (e) {
-        let id = document.getElementsByName("username")[0].value;
-
         e.preventDefault();
+        let id = document.getElementsByName("username")[0].value;
+        console.log(id);
+
         fetch("/chkDuplication", {
           method: "POST",
           headers: {
@@ -62,12 +55,13 @@
         })
           .then((r) => r.json())
           .then((json) => {
+            console.log(json);
             if (json.result === null && id) {
-              alert("사용할 수 있는 아이디입니다.");
+              alert("사용가능 한 아이디입니다.");
             } else if (id == "") {
-              alert("필수 입력 값입니다.");
+              alert("빈칸입니다.");
             } else {
-              alert("중복된 아이디입니다.");
+              alert("중복 된 아이디입니다.");
             }
           });
       });
@@ -76,14 +70,10 @@
         let pw = document.getElementsByName("password")[0].value;
         let pwCheck = document.getElementsByName("passwordCheck")[0].value;
         if (pw == pwCheck) {
-          pwWarning.style.display = "block";
           pwWarning.innerText = "비밀번호가 일치합니다.";
-          pwWarning.style.color = "green";
           submitBtn.disabled = false;
         } else {
-          pwWarning.style.display = "block";
           pwWarning.innerText = "비밀번호가 일치하지않습니다.";
-          pwWarning.style.color = "red";
         }
       }
     </script>

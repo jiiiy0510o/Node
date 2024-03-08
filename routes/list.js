@@ -13,21 +13,15 @@ connectDB
   });
 
 router.get("/list", async (req, res) => {
+  let loginUser = req.user.username;
   let result = await db.collection("post").find().toArray();
-  // let commentCount = await db
-  //   .collection("comments")
-  //   .aggregate([
-  //     {
-  //       $group: {
-  //         _id: "$parentId",
-  //         count: { $sum: 1 }, //각 그룹의 개수를 구합니다.
-  //       },
-  //     },
-  //   ])
-  //   .toArray();
 
-  //ejs 파일로 데이터 전송
-  res.render("list.ejs", { posts: result });
+  let comment = await db
+    .collection("comments")
+    .find({ parentId: new ObjectId(req.params.id) })
+    .toArray();
+
+  res.render("list.ejs", { posts: result, loginUser: loginUser, comment: comment });
 });
 
 router.get("/list/:id", async (req, res) => {
