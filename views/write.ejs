@@ -3,22 +3,67 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=<device-width>, initial-scale=1.0" />
-    <title>Document</title>
+    <title>새 게시물 만들기</title>
     <link rel="stylesheet" href="/css/main.css" />
+    <script src="https://kit.fontawesome.com/06a873e6b2.js" crossorigin="anonymous"></script>
   </head>
-  <body>
+  <body style="display: flex">
     <%-include("nav.ejs")%>
 
     <form action="/new-post" method="POST" enctype="multipart/form-data" class="writeForm">
-      <h3>글쓰기</h3>
-      <div class="gap8">
-        <input type="text" name="title" placeholder="제목을 입력하세요" />
+      <div class="titleBtnBar">
+        <i class="fa-solid fa-arrow-left"></i>
+        <h4>새 게시물 만들기</h4>
+        <button type="submit">게시하기</button>
       </div>
-      <div class="gap8">
-        <textarea name="content"></textarea>
+      <div class="content">
+        <div class="imgBox">
+          <label for="file">파일찾기</label>
+          <input name="upLoadImg" type="file" id="file" accept="image/*" onchange="onChange()" />
+        </div>
+        <div class="userInfo">
+          <div class="userNm"><%=user.username%></div>
+          <textarea name="content" placeholder="문구를 입력하세요" oninput="textCount()" value=""></textarea>
+          <div class="count"><span>0</span>/ 2200</div>
+        </div>
       </div>
-      <input type="file" name="img1" accept="image/*" multiple />
-      <button class="submitBtn" type="submit">전송</button>
     </form>
+
+    <script>
+      let finder = document.querySelector(".imgBox input");
+      let label = document.querySelector(".imgBox label");
+      let imgBox = document.querySelector(".imgBox");
+      let textLength = document.querySelector("textarea");
+      let count = document.querySelector(".count span");
+
+      let maxLength = 2200;
+
+      function onChange(e) {
+        console.log(finder.value);
+        let reader = new FileReader();
+
+        reader.onload = function (e) {
+          let img = document.createElement("img");
+          img.setAttribute("src", e.target.result);
+          imgBox.prepend(img);
+
+          label.style.cursor = "default";
+          finder.setAttribute("disabled", "");
+        };
+
+        reader.readAsDataURL(event.target.files[0]);
+      }
+
+      function textCount() {
+        let totalCount = textLength.value.length;
+
+        textLength.addEventListener("keydown", function () {
+          if (totalCount >= maxLength - 1) {
+            textLength.value = textLength.value.substr(0, maxLength);
+          }
+        });
+        count.innerText = totalCount;
+      }
+    </script>
   </body>
 </html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>리스트</title>
+    <title>Dailygram</title>
     <link rel="stylesheet" href="/css/main.css" />
     <script src="https://kit.fontawesome.com/06a873e6b2.js" crossorigin="anonymous"></script>
   </head>
@@ -26,8 +26,10 @@
       
           <div class="content" data-id="<%=posts[i]._id%>">
             <h2><%= posts[i].title %></h2>
-            </h5>
             <h5 class="substance"><%= posts[i].content %></h5>
+            <%if(posts[i].img !== ""){%>
+              <img src="<%- posts[i].img %>"/>
+            <%}%>
           </div>
       
           <div class="commentBox">
@@ -44,7 +46,6 @@
             </div>
           </div>
         </div>
-
         <%}%>
     </div>
       <!-- <div class="searchBox">
@@ -53,11 +54,11 @@
       </div> -->
 
       <script>
-        let searchBtn = document.querySelector(".searchBox button");
-        searchBtn.addEventListener("click", function(){
-          let searchText = document.querySelector(".search").value;
-          location.href = "/search?val=" + searchText;
-          })          
+        // let searchBtn = document.querySelector(".searchBox button");
+        // searchBtn.addEventListener("click", function(){
+        //   let searchText = document.querySelector(".search").value;
+        //   location.href = "/search?val=" + searchText;
+        // })          
       </script>
   </body>
 </html>

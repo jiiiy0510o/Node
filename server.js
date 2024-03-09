@@ -77,12 +77,6 @@ connectDB
   .catch((err) => {
     console.log(err);
   });
-// 미들웨어로서 nav.ejs 파일을 렌더링하여 모든 응답에 포함
-app.use((req, res, next) => {
-  res.locals.user = req.user; // 현재 사용자 정보를 저장하여 템플릿에서 사용 가능하도록 함
-  res.locals.nav = "nav";
-  next();
-});
 
 // 페이지 접속시 응답(라우팅)
 app.get("/", (req, res) => {
@@ -108,32 +102,26 @@ app.get("/write", (req, res) => {
   if (req.user == undefined) {
     res.send("로그인해주세요");
   } else {
-    res.render("write.ejs");
+    res.render("write.ejs", { user: req.user });
   }
 });
 
 let days = require("./date.js");
 
 app.post("/new-post", async (req, res) => {
-  upload.single("img1")(req, res, async (err) => {
+  console.log(req.body, req.file);
+  upload.single("upLoadImg")(req, res, async (err) => {
     if (err) return res.send("img 업로드 에러");
     //이미지 업로드 완료시 실행할 코드
     try {
-      if (req.body.title == "") {
-        res.send("빈칸");
-      } else if (req.body.content == "") {
-        res.send("내용빈칸");
-      } else {
-        await db.collection("post").insertOne({
-          user: req.user._id,
-          username: req.user.username,
-          title: req.body.title,
-          content: req.body.content,
-          img: req.file ? req.file.location : "",
-          day: days.format,
-        });
-        res.redirect("/list");
-      }
+      await db.collection("post").insertOne({
+        user: req.user._id,
+        username: req.user.username,
+        content: req.body.content,
+        img: req.file ? req.file.location : "",
+        day: days.format,
+      });
+      res.redirect("/list");
     } catch (e) {
       res.status(500).send("서버에러");
     }

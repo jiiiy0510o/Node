@@ -14,6 +14,10 @@ textarea {
   box-sizing: border-box;
   resize: none;
 }
+input::placeholder,
+textarea::placeholder {
+  color: #bbb;
+}
 input:focus {
   outline: none;
   border: 1px solid #999;
@@ -27,6 +31,7 @@ button {
   padding: 8px 0;
   border-radius: 6px;
   cursor: pointer;
+  background-color: transparent;
 }
 h4,
 h5 {
@@ -202,6 +207,10 @@ nav a p {
   background-color: white;
 }
 .content {
+  img {
+    width: 100%;
+    height: 300px;
+  }
 }
 .commentBox .commentLine {
   position: relative;
@@ -225,4 +234,84 @@ nav a p {
   position: absolute;
   right: 8px;
   display: none;
+}
+.writeForm {
+  width: 720px;
+  height: 460px;
+  margin: 0 auto;
+  margin-top: 110px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+.writeForm .titleBtnBar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #ccc;
+}
+.writeForm .titleBtnBar button {
+  color: cornflowerblue;
+  font-weight: 800;
+}
+.writeForm .content {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.writeForm .content .imgBox {
+  position: relative;
+  width: 52%;
+}
+.writeForm .content .imgBox img {
+  width: 100%;
+  height: 375px;
+  object-fit: cover;
+}
+.writeForm .content .imgBox label {
+  position: absolute;
+  color: cornflowerblue;
+  font-weight: 800;
+  cursor: pointer;
+  bottom: 8px;
+  right: 50%;
+  transform: translate(50%);
+  font-size: 0.8rem;
+}
+.writeForm .content .imgBox input[type="file"] {
+  width: 0px;
+  height: 0px;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  position: absolute;
+}
+.writeForm .content .userInfo {
+  position: relative;
+  width: 48%;
+  border-left: 1px solid #ccc;
+}
+.writeForm .content .userInfo .userNm {
+  padding: 8px;
+}
+.writeForm .content .userInfo textarea {
+  width: 100%;
+  height: 240px;
+  border: none;
+  line-height: 1.2rem;
+}
+.writeForm .content .userInfo textarea:focus {
+  outline: none;
+}
+.writeForm .content .userInfo .count {
+  position: absolute;
+  bottom: 100px;
+  right: 8px;
+  color: #bbb;
+  font-size: 0.76rem;
+}
+.writeForm .content .userInfo .count span {
+  padding-right: 4px;
 }

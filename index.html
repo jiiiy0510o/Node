@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Dailygram</title>
     <link rel="stylesheet" href="/css/main.css" />
     <script src="https://kit.fontawesome.com/06a873e6b2.js" crossorigin="anonymous"></script>
   </head>
@@ -38,7 +38,7 @@
       function checkInput() {
         let idlength = idval.value.length;
         let pwlength = hiddenPw.value.length;
-        if (idlength !== 0 && pwlength < 5) {
+        if (idlength !== 0 && pwlength < 4) {
           loginBtn.disabled = true;
         } else {
           loginBtn.disabled = false;
