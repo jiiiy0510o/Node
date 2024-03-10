@@ -189,8 +189,15 @@ app.post("/comment", async (req, res) => {
 
 app.get("/message", async (req, res) => {
   let partner = req.query.id;
+  let user = await db.collection("user").find().toArray();
   let message = await db.collection("message").find().toArray();
 
-  console.log(message);
-  res.render("message.ejs", { partner: partner });
+  console.log(user.username);
+  res.render("message.ejs", { user: user });
+});
+
+app.get("/editProfile", async (req, res) => {
+  let user = req.user;
+  console.log(user);
+  res.render("editProfile.ejs", { user: user });
 });

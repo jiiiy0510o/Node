@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <script src="https://kit.fontawesome.com/06a873e6b2.js" crossorigin="anonymous"></script>
+  </head>
+  <body style="display: flex">
+    <%-include("nav.ejs")%>
+    <div class="profilePage">
+      <h3>프로필 편집</h3>
+      <div class="userNick">
+        <div class="nicknameInfo">
+          <div class="userImg">
+            <img src="/img/userImg.png" alt="유저 기본이미지" />
+          </div>
+          <ul class="nickName">
+            <li><%=user.username%></li>
+            <li>유저 닉네임</li>
+          </ul>
+        </div>
+        <div class="upLoadUserImg">
+          <input type="file" id="userimg" onchange="onChange()" />
+          <label for="userimg">사진 변경</label>
+        </div>
+      </div>
+      <form action="POST">
+        <div class="editBox">
+          <h4>소개</h4>
+          <textarea class="introduction" id="" oninput="textCount()"></textarea>
+          <p><span>0 </span>/ 150</p>
+        </div>
+        <div class="gender">
+          <h4>성별</h4>
+          <div class="select">
+            <div class="selected">
+              <div class="selected-value">밝히고 싶지 않음</div>
+              <div class="arrow"><i class="fa-solid fa-chevron-down"></i></div>
+            </div>
+            <ul>
+              <li>여자</li>
+              <li>남자</li>
+            </ul>
+          </div>
+        </div>
+        <button>제출</button>
+      </form>
+    </div>
+
+    <script>
+      let textLength = document.querySelector("textarea");
+      let count = document.querySelector(".editBox p span");
+      let warning = document.querySelector(".editBox p");
+      let genderSelect = document.querySelector(".select");
+
+      genderSelect.addEventListener("click", function () {});
+      function onChange() {
+        let reader = new FileReader();
+        let img = document.querySelector(".userImg img");
+
+        reader.onload = function (e) {
+          img.src = e.target.result;
+        };
+
+        let file = document.querySelector("input[type='file']").files[0]; // 업로드한 파일을 가져옵니다.
+        reader.readAsDataURL(file); // 파일을 읽습니다.
+      }
+      let maxLength = 150;
+
+      function textCount() {
+        let totalCount = textLength.value.length;
+
+        textLength.addEventListener("keydown", function () {
+          if (totalCount >= maxLength) {
+            textLength.value = textLength.value.substr(0, maxLength);
+            warning.style.color = "red";
+            textLength.style.borderColor = "red";
+          } else {
+            warning.style.color = "#ccc";
+            textLength.style.borderColor = "#333";
+          }
+        });
+        count.innerText = totalCount;
+      }
+    </script>
+  </body>
+</html>

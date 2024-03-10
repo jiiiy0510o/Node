@@ -26,6 +26,12 @@ a {
   color: inherit;
   text-decoration: none;
 }
+ul,
+li {
+  padding: 0;
+  list-style: none;
+  margin: 0;
+}
 button {
   border: none;
   padding: 8px 0;
@@ -67,8 +73,7 @@ h5 {
   margin-bottom: 30px;
 }
 .loginPage .loginBox .logo,
-.registerPage .registerBox .logo,
-form {
+.registerPage .registerBox .logo {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -126,6 +131,9 @@ form {
 }
 .registerPage .registerBox form .overChk {
   position: relative;
+}
+.registerPage .registerBox form h5 {
+  padding: 8px 0;
 }
 .registerPage .registerBox form .overChk span {
   font-size: 1.1rem;
@@ -235,15 +243,20 @@ nav a p {
   right: 8px;
   display: none;
 }
-.writeForm {
+.writePage {
+  margin: 0 auto;
+}
+.writePage form {
   width: 720px;
   height: 460px;
   margin: 0 auto;
   margin-top: 110px;
   border: 1px solid #ccc;
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
 }
-.writeForm .titleBtnBar {
+.writePage form .titleBtnBar {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -252,25 +265,25 @@ nav a p {
   padding: 8px 12px;
   border-bottom: 1px solid #ccc;
 }
-.writeForm .titleBtnBar button {
+.writePage form .titleBtnBar button {
   color: cornflowerblue;
   font-weight: 800;
 }
-.writeForm .content {
+.writePage form .content {
   display: flex;
   width: 100%;
   height: 100%;
 }
-.writeForm .content .imgBox {
+.writePage form .content .imgBox {
   position: relative;
   width: 52%;
 }
-.writeForm .content .imgBox img {
+.writePage form .content .imgBox img {
   width: 100%;
   height: 375px;
   object-fit: cover;
 }
-.writeForm .content .imgBox label {
+.writePage form .content .imgBox label {
   position: absolute;
   color: cornflowerblue;
   font-weight: 800;
@@ -280,7 +293,7 @@ nav a p {
   transform: translate(50%);
   font-size: 0.8rem;
 }
-.writeForm .content .imgBox input[type="file"] {
+.writePage form .content .imgBox input[type="file"] {
   width: 0px;
   height: 0px;
   padding: 0;
@@ -288,30 +301,187 @@ nav a p {
   overflow: hidden;
   position: absolute;
 }
-.writeForm .content .userInfo {
+.writePage form .content .userInfo {
   position: relative;
   width: 48%;
   border-left: 1px solid #ccc;
 }
-.writeForm .content .userInfo .userNm {
+.writePage form .content .userInfo .userNm {
   padding: 8px;
 }
-.writeForm .content .userInfo textarea {
+.writePage form .content .userInfo textarea {
   width: 100%;
   height: 240px;
   border: none;
   line-height: 1.2rem;
 }
-.writeForm .content .userInfo textarea:focus {
+.writePage form .content .userInfo textarea:focus {
   outline: none;
 }
-.writeForm .content .userInfo .count {
+.writePage form .content .userInfo .count {
   position: absolute;
   bottom: 100px;
   right: 8px;
   color: #bbb;
   font-size: 0.76rem;
 }
-.writeForm .content .userInfo .count span {
+.writePage form .content .userInfo .count span {
   padding-right: 4px;
+}
+.messageList {
+  width: 24vw;
+  background-color: #9198e5;
+}
+.myPage {
+  display: flex;
+  padding: 50px 120px;
+  gap: 60px;
+}
+.myPage .userImage {
+  width: 240px;
+}
+.myPage .userImage img {
+  width: 120px;
+  padding: 0 60px;
+}
+.myPage .userInfo {
+  position: relative;
+  width: 300px;
+}
+.myPage .userInfo p {
+  font-size: 1.2rem;
+}
+.myPage .userInfo a {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  background-color: #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  padding: 4px 12px;
+}
+.myPage .userInfo .userState {
+  display: flex;
+  margin-top: 12px;
+}
+.myPage .userInfo .userState li {
+  width: 33%;
+  font-size: 0.96rem;
+}
+.myPage .userInfo .userState li span {
+  font-weight: 800;
+}
+.profilePage {
+  width: 60%;
+
+  padding: 0 50px;
+  margin: 0 auto;
+}
+.profilePage .userNick {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #eee;
+  border-radius: 10px;
+  padding: 12px 24px;
+}
+.profilePage .userNick .nicknameInfo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.profilePage .userNick .userImg img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profilePage .userNick .nickName li:first-child {
+  font-weight: 900;
+}
+.profilePage .userNick .nickName li:last-child {
+  color: #aaa;
+  font-size: 0.86rem;
+}
+.profilePage .userNick .upLoadUserImg input {
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+.profilePage .userNick .upLoadUserImg label {
+  cursor: pointer;
+  border-radius: 6px;
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 0.86rem;
+  background-color: cornflowerblue;
+}
+
+.profilePage form .editBox {
+  position: relative;
+}
+.profilePage form .editBox h4 {
+  margin-top: 20px;
+}
+.profilePage form .editBox .introduction {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 12px;
+  height: 80px;
+  padding-right: 100px;
+  overflow: hidden;
+}
+.profilePage form .editBox .introduction:focus {
+  outline: none;
+  border: 1px solid #333;
+}
+.profilePage form .editBox p {
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+  color: #ccc;
+  font-size: 0.86rem;
+}
+.profilePage form .editBox p span {
+  padding-left: 8px;
+}
+.profilePage .gender h4 {
+  margin: 20px 0 10px 0;
+}
+.profilePage .gender .select {
+  width: 100%;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  position: relative;
+  cursor: pointer;
+}
+.profilePage .gender .select:hover {
+  background-color: #eee;
+}
+.profilePage .gender .select .selected {
+  padding: 12px 20px 0 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profilePage .gender .select .arrow i {
+  color: #ccc;
+  font-size: 0.9rem;
+}
+.profilePage .gender .select ul {
+  width: 400px;
+  position: absolute;
+  box-shadow: 3px 3px 8px 3px #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  right: 0;
+  bottom: -92px;
+  display: none;
+}
+.profilePage .gender .select ul li {
+  padding: 12px 20px;
 }

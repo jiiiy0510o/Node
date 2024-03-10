@@ -7,35 +7,29 @@
     <link rel="stylesheet" href="/css/main.css" />
     <script src="https://kit.fontawesome.com/06a873e6b2.js" crossorigin="anonymous"></script>
   </head>
-  <body>
+  <body style="display: flex">
     <%-include("nav.ejs")%>
-    <div class="messageCon">
-      <% for(let i=0; i<posts.length; i++){ %>
-        <tr class="titleRow">
-          <td>
-            <h5 class="username"><%=posts[i].username%></h5>
-          </td>
-          <td>
-            <h4><a href="/detail/<%=posts[i]._id%>"><%= posts[i].title %></a></h4>
-          </td>
-
-          <td>
-            <div class="date">
-              <%if(posts[i].user){%>
-                <h5><%=posts[i].day%></h5>
-              <%}%>
-            </div>
-          </td>  
-        </tr>
-      <% } %>
-      <!-- <div class="messageBox">
-        <div class="partner"><%=partner%></div>
+    <ul class="messageList">
+      <%for(i=0; i<user.length; i++){%>
+        <li class="titleRow">
+          <h5 class="username"><%=user[i].username%></h5>
+  
+          <div class="date"></div>
+        </li>
+      <%}%>
+    </ul>
+    <div class="messageBox">
+      <h2>내 메시지</h2>
+      <h4>친구나 그룹에 비공개 사진과 메시지를 보내보세요</h4>
+    </div>
+    <!-- <div class="messageBox">
+        <div class="partner"></div>
         <form action="POST">
           <input type="text" placeholder="메세지를 입력하세요." />
           <button><i class="fa-regular fa-paper-plane"></i></button>
         </form>
       </div> -->
-    </div>
+
     <script>
       let chatBtn = document.querySelector("form button");
 

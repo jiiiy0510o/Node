@@ -9,25 +9,28 @@
   </head>
   <body style="display: flex">
     <%-include("nav.ejs")%>
-
-    <form action="/new-post" method="POST" enctype="multipart/form-data" class="writeForm">
-      <div class="titleBtnBar">
-        <i class="fa-solid fa-arrow-left"></i>
-        <h4>새 게시물 만들기</h4>
-        <button type="submit">게시하기</button>
-      </div>
-      <div class="content">
-        <div class="imgBox">
-          <label for="file">파일찾기</label>
-          <input name="upLoadImg" type="file" id="file" accept="image/*" onchange="onChange()" />
+    <div class="writePage">
+      <form action="/new-post" method="POST" enctype="multipart/form-data" class="writeForm">
+        <div class="titleBtnBar">
+          <i class="fa-solid fa-arrow-left"></i>
+          <h4>새 게시물 만들기</h4>
+          <button type="submit">게시하기</button>
         </div>
-        <div class="userInfo">
-          <div class="userNm"><%=user.username%></div>
-          <textarea name="content" placeholder="문구를 입력하세요" oninput="textCount()" value=""></textarea>
-          <div class="count"><span>0</span>/ 2200</div>
+        <div class="content">
+          <div class="imgBox">
+            <img src="" alt="미리보기" />
+            <label for="file">파일찾기</label>
+            <input name="upLoadImg" type="file" id="file" accept="image/*" onchange="onChange()" />
+            <input name="upLoadImg" type="file" id="file" accept="image/*" onchange="onChange()" />
+          </div>
+          <div class="userInfo">
+            <div class="userNm"><%=user.username%></div>
+            <textarea name="content" placeholder="문구를 입력하세요" oninput="textCount()" value=""></textarea>
+            <div class="count"><span>0</span>/ 2200</div>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
 
     <script>
       let finder = document.querySelector(".imgBox input");
@@ -35,20 +38,22 @@
       let imgBox = document.querySelector(".imgBox");
       let textLength = document.querySelector("textarea");
       let count = document.querySelector(".count span");
+      let warning = document.querySelector(".count");
 
       let maxLength = 2200;
 
       function onChange(e) {
+        console.log(document.querySelector("input[type='file']").files[0]);
         console.log(finder.value);
+        let img = document.querySelector("img");
         let reader = new FileReader();
 
         reader.onload = function (e) {
-          let img = document.createElement("img");
           img.setAttribute("src", e.target.result);
-          imgBox.prepend(img);
 
           label.style.cursor = "default";
           finder.setAttribute("disabled", "");
+          console.log(finder.e.target.result);
         };
 
         reader.readAsDataURL(event.target.files[0]);
@@ -58,8 +63,11 @@
         let totalCount = textLength.value.length;
 
         textLength.addEventListener("keydown", function () {
-          if (totalCount >= maxLength - 1) {
+          if (totalCount >= maxLength) {
             textLength.value = textLength.value.substr(0, maxLength);
+            warning.style.color = "red";
+          } else {
+            warning.style.color = "#ccc";
           }
         });
         count.innerText = totalCount;
