@@ -134,12 +134,13 @@ app.delete("/delete", async (req, res) => {
   res.send("삭제완료");
 });
 
-app.get("/myPage", (req, res) => {
+app.get("/myPage", async (req, res) => {
   if (!req.user) {
     res.send("로그인해주세요");
   } else {
     let username = req.user.username;
-    res.render("myPage.ejs", { username: username });
+    let user = await db.collection("user").findOne({ username: req.user.username });
+    res.render("myPage.ejs", { username: username, user: user });
   }
 });
 
@@ -188,16 +189,31 @@ app.post("/comment", async (req, res) => {
 });
 
 app.get("/message", async (req, res) => {
-  let partner = req.query.id;
-  let user = await db.collection("user").find().toArray();
-  let message = await db.collection("message").find().toArray();
+  let username = req.user.username;
+  let allUser = await db.collection("user").find().toArray();
+  let partner = await db.collection("user").findOne({ _id: new ObjectId(req.query) });
+  console.log(partner);
+  res.render("message.ejs", { allUser, username, partner });
+});
 
-  console.log(user.username);
-  res.render("message.ejs", { user: user });
+app.post("/message", async (req, res) => {
+  console.log(req.query);
 });
 
 app.get("/editProfile", async (req, res) => {
   let user = req.user;
-  console.log(user);
   res.render("editProfile.ejs", { user: user });
+});
+
+app.post("/profileSubmit", async (req, res) => {
+  await db.collection("user").updateOne(
+    { username: req.user.username },
+    {
+      $set: {
+        intro: req.body.introduction,
+        gender: req.body.genderSelect,
+      },
+    }
+  );
+  res.render("myPage.ejs");
 });

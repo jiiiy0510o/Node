@@ -179,7 +179,7 @@ nav a:hover(:not(first-child)) {
 nav a:first-child {
   padding: 24px 6px;
 }
-nav a img {
+nav a:first-child img {
   width: 160px;
 }
 nav a p {
@@ -190,6 +190,15 @@ nav a p {
   justify-content: center;
   font-size: 1.2rem;
   margin: 0;
+}
+nav a:last-child p {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid #333;
+}
+nav a:last-child p img {
+  width: 26px;
 }
 .posts {
   width: 50vw;
@@ -328,9 +337,77 @@ nav a p {
 .writePage form .content .userInfo .count span {
   padding-right: 4px;
 }
-.messageList {
+.messagePage {
+  display: flex;
+}
+.messagePage .leftmessageBox {
+  box-sizing: border-box;
   width: 24vw;
-  background-color: #9198e5;
+  border-right: 1px solid #ccc;
+}
+.messagePage .leftmessageBox .messageList {
+  padding: 20px 0;
+}
+.messagePage .leftmessageBox h3,
+.messagePage .leftmessageBox > h4 {
+  padding-left: 20px;
+}
+.messagePage .leftmessageBox .messageList .messageRow {
+  padding: 16px 0 16px 20px;
+  cursor: pointer;
+}
+.messagePage .leftmessageBox .messageList .messageRow:hover {
+  background-color: #f6f6f6;
+}
+.messagePage .leftmessageBox .messageList .messageRow h4 {
+  font-weight: 300;
+}
+.messagePage .rightmessageBox {
+  width: 56vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.messagePage .rightmessageBox .preMsg {
+  display: none;
+}
+.messagePage .rightmessageBox .preMsg span {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+.messagePage .rightmessageBox .preMsg h2,
+.messagePage .rightmessageBox .preMsg h5 {
+  font-weight: 300;
+  margin: 0;
+}
+.messagePage .rightmessageBox .preMsg h5 {
+  margin-top: 8px;
+  color: #888;
+}
+.messagePage .rightmessageBox .messageCon {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+.messagePage .rightmessageBox .messageCon .partner {
+  height: 80px;
+  border-bottom: 1px solid #ddd;
+}
+.messagePage .rightmessageBox .messageCon form {
+  position: absolute;
+  bottom: 8px;
+  padding: 0 8px;
+}
+.messagePage .rightmessageBox .messageCon form input {
+  width: 600px;
+  padding: 12px;
+  border-radius: 24px;
+}
+.messagePage .rightmessageBox .messageCon form button {
+  position: absolute;
+  right: 24px;
+  bottom: 8px;
 }
 .myPage {
   display: flex;
@@ -373,7 +450,6 @@ nav a p {
 }
 .profilePage {
   width: 60%;
-
   padding: 0 50px;
   margin: 0 auto;
 }
@@ -396,7 +472,6 @@ nav a p {
   border-radius: 50%;
   overflow: hidden;
 }
-
 .profilePage .userNick .nickName li:first-child {
   font-weight: 900;
 }
@@ -426,7 +501,7 @@ nav a p {
 .profilePage form .editBox h4 {
   margin-top: 20px;
 }
-.profilePage form .editBox .introduction {
+.profilePage form .editBox textarea {
   width: 100%;
   border-radius: 10px;
   margin-top: 12px;
@@ -434,7 +509,7 @@ nav a p {
   padding-right: 100px;
   overflow: hidden;
 }
-.profilePage form .editBox .introduction:focus {
+.profilePage form .editBox textarea:focus {
   outline: none;
   border: 1px solid #333;
 }
@@ -460,7 +535,7 @@ nav a p {
   cursor: pointer;
 }
 .profilePage .gender .select:hover {
-  background-color: #eee;
+  background-color: #f6f6f6;
 }
 .profilePage .gender .select .selected {
   padding: 12px 20px 0 20px;
@@ -473,15 +548,41 @@ nav a p {
   font-size: 0.9rem;
 }
 .profilePage .gender .select ul {
-  width: 400px;
+  width: 300px;
   position: absolute;
-  box-shadow: 3px 3px 8px 3px #ddd;
+  box-shadow: 1px 1px 6px 1px #ddd;
   border-radius: 8px;
   background-color: #fff;
   right: 0;
-  bottom: -92px;
+  bottom: -140px;
   display: none;
 }
 .profilePage .gender .select ul li {
-  padding: 12px 20px;
+  position: relative;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+}
+.profilePage .gender .select ul li input {
+  position: absolute;
+  right: 12px;
+  padding: 4px;
+}
+.profilePage .gender .select ul li label {
+  padding: 8px 0;
+  display: inline-block;
+  width: 260px;
+  height: 30px;
+  cursor: pointer;
+}
+.profilePage .gender .select ul li:hover {
+  background-color: #f6f6f6;
+}
+.profilePage form button:last-child {
+  background-color: cornflowerblue;
+  color: white;
+  width: 160px;
+  position: absolute;
+  right: 100px;
+  bottom: 100px;
 }

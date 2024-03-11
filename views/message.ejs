@@ -3,39 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>데일리그램:메시지</title>
     <link rel="stylesheet" href="/css/main.css" />
     <script src="https://kit.fontawesome.com/06a873e6b2.js" crossorigin="anonymous"></script>
   </head>
   <body style="display: flex">
     <%-include("nav.ejs")%>
-    <ul class="messageList">
-      <%for(i=0; i<user.length; i++){%>
-        <li class="titleRow">
-          <h5 class="username"><%=user[i].username%></h5>
-  
-          <div class="date"></div>
-        </li>
-      <%}%>
-    </ul>
-    <div class="messageBox">
-      <h2>내 메시지</h2>
-      <h4>친구나 그룹에 비공개 사진과 메시지를 보내보세요</h4>
-    </div>
-    <!-- <div class="messageBox">
-        <div class="partner"></div>
-        <form action="POST">
-          <input type="text" placeholder="메세지를 입력하세요." />
-          <button><i class="fa-regular fa-paper-plane"></i></button>
-        </form>
-      </div> -->
+    <div class="messagePage">
+      <div class="leftmessageBox">
+        <h3><%=username%></h3>
+        <h4>메시지</h4>
+        <ul class="messageList">
+          <%for(i=0; i<allUser.length; i++){%>
+            <li class="messageRow" data-id=<%=allUser[i]._id%>>
+              <h4 class="username"><%=allUser[i].username%></h4>
+              <div class="date"></div>
+            </li>
+          <%}%>
+        </ul>
+      </div>
+      <div class="rightmessageBox">
+        <div class="preMsg">
+          <span><i class="fa-regular fa-comments"></i></span>
+          <h2>내 메시지</h2>
+          <h5>친구나 그룹에 비공개 사진과 메시지를 보내보세요</h5>
+        </div>
+       <div class="messageCon">
+          <div class="partner"><%=partner.username%></div>
+          <form action="POST">
+            <input type="text" placeholder="메세지를 입력하세요." />
+            <button><i class="fa-regular fa-paper-plane"></i></button>
+          </form>
+        </div>
+      </div>
 
+  
+    </div>
     <script>
+      let messageRow = document.querySelectorAll(".messageRow");
       let chatBtn = document.querySelector("form button");
 
-      chatBtn.addEventListener("click", function () {
-        console.log("Rrr");
-      });
+      for(let i=0; i<messageRow.length; i++){
+        messageRow[i].addEventListener("click", function(e){
+        fetch("/message?id=" + e.currentTarget.dataset.id,{
+          method:"POST",
+          header:{
+            'Content-Type':"application/json"
+          }
+        }).then((r)=>r.text()).then((r)=>{})
+      })
+      }
+
+
+
     </script>
   </body>
 </html>

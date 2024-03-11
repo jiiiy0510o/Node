@@ -57,17 +57,16 @@
         })
         })
       }
-      if(message){
-        message.addEventListener("click", function(e){
-          console.log("R")
-        fetch('/message?partner=',{
-          method:"post",
-          header:{
-            'Content-Type':"application/json"
-          },
-        }).then((r)=>r.text()).then((r)=>{})
-        })
-      }
+      // if(message){
+      //   message.addEventListener("click", function(e){
+      //   fetch('/message?partner=',{
+      //     method:"post",
+      //     header:{
+      //       'Content-Type':"application/json"
+      //     },
+      //   }).then((r)=>r.text()).then((r)=>{})
+      //   })
+      // }
 
       document.querySelector(".content").insertAdjacentHTML("beforeend", `<img src="<%- result.img %>"/>`);
 

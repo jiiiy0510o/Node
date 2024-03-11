@@ -21,7 +21,6 @@
             <img src="" alt="미리보기" />
             <label for="file">파일찾기</label>
             <input name="upLoadImg" type="file" id="file" accept="image/*" onchange="onChange()" />
-            <input name="upLoadImg" type="file" id="file" accept="image/*" onchange="onChange()" />
           </div>
           <div class="userInfo">
             <div class="userNm"><%=user.username%></div>
@@ -45,7 +44,7 @@
       function onChange(e) {
         console.log(document.querySelector("input[type='file']").files[0]);
         console.log(finder.value);
-        let img = document.querySelector("img");
+        let img = document.querySelector(".imgBox img");
         let reader = new FileReader();
 
         reader.onload = function (e) {

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>프로필 편집</title>
     <link rel="stylesheet" href="/css/main.css" />
     <script src="https://kit.fontawesome.com/06a873e6b2.js" crossorigin="anonymous"></script>
   </head>
@@ -22,14 +22,14 @@
           </ul>
         </div>
         <div class="upLoadUserImg">
-          <input type="file" id="userimg" onchange="onChange()" />
+          <input type="file" id="userimg" name="profileImg" onchange="onChange()" />
           <label for="userimg">사진 변경</label>
         </div>
       </div>
-      <form action="POST">
+      <form action="/profileSubmit" method="POST">
         <div class="editBox">
           <h4>소개</h4>
-          <textarea class="introduction" id="" oninput="textCount()"></textarea>
+          <textarea name="introduction" oninput="textCount()" placeholder="소개를 입력해주세요"></textarea>
           <p><span>0 </span>/ 150</p>
         </div>
         <div class="gender">
@@ -40,8 +40,17 @@
               <div class="arrow"><i class="fa-solid fa-chevron-down"></i></div>
             </div>
             <ul>
-              <li>여자</li>
-              <li>남자</li>
+              <li>
+                <input type="radio" name="genderSelect" id="gender1" value="여성" /><label for="gender1">여성</label>
+              </li>
+              <li>
+                <input type="radio" name="genderSelect" id="gender2" value="남성" /><label for="gender2">남성</label>
+              </li>
+              <li>
+                <input type="radio" name="genderSelect" id="gender3" value="밝히고 싶지 않음" /><label for="gender3"
+                  >밝히고 싶지 않음</label
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -53,18 +62,38 @@
       let textLength = document.querySelector("textarea");
       let count = document.querySelector(".editBox p span");
       let warning = document.querySelector(".editBox p");
-      let genderSelect = document.querySelector(".select");
+      let select = document.querySelector(".select");
+      let selectValue = document.querySelector(".selected-value");
+      let selectBox = document.querySelector(".select ul");
+      let genderSelect = document.querySelectorAll(".select ul li label");
 
-      genderSelect.addEventListener("click", function () {});
+      select.addEventListener("click", function () {
+        if (selectBox.style.display == "block") {
+          selectBox.style.display = "none";
+        } else {
+          selectBox.style.display = "block";
+        }
+      });
+
+      for (let i = 0; i < genderSelect.length; i++) {
+        genderSelect[i].addEventListener("click", function () {
+          if (selectBox.style.display == "block") {
+            selectBox.style.display = "none";
+          }
+          selectValue.innerText = genderSelect[i].innerText;
+        });
+      }
+
       function onChange() {
         let reader = new FileReader();
         let img = document.querySelector(".userImg img");
+        let file = document.querySelector("input[type='file']").files[0]; // 업로드한 파일을 가져옵니다.
 
         reader.onload = function (e) {
           img.src = e.target.result;
+          console.log(file, e.target.result);
         };
 
-        let file = document.querySelector("input[type='file']").files[0]; // 업로드한 파일을 가져옵니다.
         reader.readAsDataURL(file); // 파일을 읽습니다.
       }
       let maxLength = 150;
