@@ -191,13 +191,15 @@ app.post("/comment", async (req, res) => {
 app.get("/message", async (req, res) => {
   let username = req.user.username;
   let allUser = await db.collection("user").find().toArray();
-  let partner = await db.collection("user").findOne({ _id: new ObjectId(req.query) });
-  console.log(partner);
-  res.render("message.ejs", { allUser, username, partner });
+
+  console.log(allUser);
+  res.render("message.ejs", { allUser, username });
 });
 
 app.post("/message", async (req, res) => {
   console.log(req.query);
+  let partner = await db.collection("user").findOne({ _id: new ObjectId(req.query) });
+  res.render("message.ejs", { partner });
 });
 
 app.get("/editProfile", async (req, res) => {
